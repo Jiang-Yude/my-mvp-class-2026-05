@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5/5 嘉我好漾 ｜ 創業點子驗證術：AI 幫你試水溫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;500;700;900&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* 大地色札記風：低飽和、咖啡淺褐墨綠 */
+  --bg:           #F2EBDB;          /* 米白底（更柔） */
+  --paper:        #FBF6E9;          /* 紙張白 */
+  --cream:        #EADFC6;          /* 奶茶 */
+  --postit:       #E8D89B;          /* 米黃便利貼（降飽和） */
+  --text:         #3A2E2A;          /* 墨棕 */
+  --text-soft:    #6B5C50;          /* 軟墨棕 */
+  --accent:       #8B6F47;          /* 咖啡 - 主彩（取代橘紅） */
+  --accent-light: #A8896B;          /* 淺咖啡 */
+  --accent-deep:  #5E4A30;          /* 深咖 */
+  --accent2:      #5C7560;          /* 墨綠 - 次彩 */
+  --accent3:      #B8956A;          /* 淺褐 - 裝飾 */
+  --accent4:      #4A6478;          /* 墨藍灰 */
+  --subtle:       rgba(58, 46, 42, 0.2);
+  --line-soft:    rgba(58, 46, 42, 0.1);
+  --card:         #FBF6E9;
+  --card-deep:    #EADFC6;
+  --highlight-bg: rgba(139, 111, 71, 0.08);
+  --highlight-bg-strong: rgba(139, 111, 71, 0.16);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;
+  background: var(--bg);
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(58,46,42,0.04) 31px, rgba(58,46,42,0.04) 32px);
+  color: var(--text);
+  line-height: 1.85; font-size: 19px; letter-spacing: 0.01em;
+}
+
+/* === 主段面板：紙卡 + 偏移陰影手帳風 ===
+   theme-light = paper 純紙白 + 橘紅陰影
+   theme-dark  = cream 奶茶米色 + 橄欖綠陰影
+   差異微妙、都在米白系，不會深咖反白 */
+.section.theme-light {
+  background: var(--paper) !important;
+  color: var(--text);
+  border: 1.5px solid var(--text) !important;
+  box-shadow: 5px 5px 0 var(--accent) !important;
+  border-radius: 6px !important;
+}
+.section.theme-light .section-header { background: var(--paper); }
+
+.section.theme-dark {
+  background: var(--cream) !important;
+  color: var(--text);
+  border: 1.5px solid var(--text) !important;
+  box-shadow: 5px 5px 0 var(--accent2) !important;
+  border-radius: 6px !important;
+}
+.section.theme-dark .section-header { background: var(--cream); }
+
+/* 標題用 Noto Serif TC 襯線體 */
+h1, h2, .section-title, .hero h1, .ogsm-cell-title, .timeline-title { font-family: "Noto Serif TC", serif; }
+h3, h4, .demo-block-title, .story-box-title { font-family: "Noto Serif TC", serif; font-weight: 700; }
+.quote-label, .further-reading-label, .tip-box-label { font-family: "Noto Sans TC", sans-serif; }
+
+.top-bar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(247, 241, 227, 0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1.5px solid var(--text);
+  padding: 12px 24px;
+  box-shadow: 0 2px 12px rgba(58, 46, 42, 0.08);
+}
+.top-bar-inner {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; flex-wrap: nowrap; align-items: center;
+  gap: 14px; justify-content: space-between;
+  overflow-x: auto;
+}
+.top-bar-title {
+  font-family: "Noto Serif TC", serif;
+  font-size: 15px; font-weight: 700;
+  color: var(--text); letter-spacing: 0.02em;
+  flex-shrink: 0; white-space: nowrap;
+}
+.top-bar-title small { display: none; }
+.top-nav {
+  display: flex; gap: 2px; flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+.top-nav a {
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.top-nav a:hover { background: var(--accent); color: #fff; }
+.top-nav a.active { background: var(--text); color: var(--bg); }
+
+.container { max-width: 1080px; margin: 0 auto; padding: 48px 36px 120px; }
+
+.hero { padding: 64px 0 48px; border-bottom: 2px solid var(--subtle); margin-bottom: 56px; text-align: center; }
+.hero-meta { font-size: 18px; color: var(--accent); letter-spacing: 0.2em; font-weight: 600; margin-bottom: 24px; }
+.hero h1 { font-size: 60px; font-weight: 800; color: var(--text); line-height: 1.25; letter-spacing: -0.01em; margin-bottom: 28px; }
+.hero-subtitle { font-size: 24px; color: var(--text); opacity: 0.75; margin-bottom: 40px; font-weight: 400; }
+.hero-quote { display: inline-block; font-size: 28px; font-style: italic; color: var(--accent); background: var(--highlight-bg); border-left: 5px solid var(--accent); padding: 22px 36px; border-radius: 4px; font-weight: 600; letter-spacing: 0.05em; }
+.hero-cta {
+  display: inline-block;
+  margin-top: 28px;
+  background: var(--accent);
+  color: #FFF8DC;
+  padding: 12px 26px;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 12px rgba(62, 39, 23, 0.18);
+  transition: transform 0.2s;
+}
+.hero-cta:hover { transform: translateY(-2px); }
+
+/* OGSM 表 */
+.ogsm { background: var(--card); border: 2px solid var(--accent-light); border-radius: 16px; padding: 36px 40px; margin-bottom: 48px; box-shadow: 0 4px 16px rgba(93, 64, 55, 0.08); }
+.ogsm-title { font-size: 24px; font-weight: 800; color: var(--accent-deep); letter-spacing: 0.08em; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+.ogsm-title::before { content: "🧭"; font-size: 28px; }
+.ogsm-subtitle { font-size: 16px; color: var(--text); opacity: 0.7; margin-bottom: 24px; font-weight: 400; }
+.ogsm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.ogsm-cell { background: var(--bg); padding: 22px 24px; border-radius: 10px; border-left: 5px solid var(--accent); }
+.ogsm-cell-label { font-size: 14px; font-weight: 800; color: var(--accent); letter-spacing: 0.18em; margin-bottom: 10px; }
+.ogsm-cell-title { font-size: 19px; font-weight: 700; color: var(--text); margin-bottom: 12px; line-height: 1.5; }
+.ogsm-cell ul { font-size: 16px; color: var(--text); line-height: 1.7; padding-left: 20px; }
+.ogsm-cell li { margin-bottom: 6px; }
+
+.timeline { background: var(--card); border: 1.5px solid var(--subtle); border-radius: 16px; padding: 32px; margin-bottom: 64px; }
+.timeline-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 8px; letter-spacing: 0.05em; }
+.timeline-subtitle { font-size: 15px; color: var(--text); opacity: 0.65; margin-bottom: 24px; }
+
+/* 水平比例時間軸 */
+.timeline-bar {
+  display: flex; width: 100%; height: 92px;
+  border-radius: 12px; overflow: hidden;
+  border: 1.5px solid var(--subtle);
+  margin-top: 8px;
+  box-shadow: 0 2px 8px rgba(93, 64, 55, 0.08);
+}
+.timeline-segment {
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center; padding: 8px 4px;
+  color: var(--text); font-weight: 600;
+  border-right: 1.5px solid rgba(255, 248, 220, 0.4);
+  position: relative; min-width: 0;
+  cursor: pointer; transition: filter 0.2s;
+  text-decoration: none;
+}
+.timeline-segment:last-child { border-right: none; }
+.timeline-segment:hover { filter: brightness(1.08); }
+.timeline-segment.s0 { background: rgba(201, 178, 148, 0.55); }
+.timeline-segment.s1 { background: rgba(201, 149, 106, 0.65); color: #FFF8DC; }
+.timeline-segment.s2 { background: rgba(142, 90, 54, 0.75); color: #FFF8DC; }
+.timeline-segment.s3 { background: rgba(181, 112, 74, 0.78); color: #FFF8DC; }
+.timeline-segment.s4 { background: rgba(142, 90, 54, 0.85); color: #FFF8DC; }
+.timeline-segment.s5 { background: rgba(115, 70, 40, 0.92); color: #FFF8DC; }
+.timeline-segment.s6 { background: rgba(85, 50, 28, 0.98); color: #FFE6B8; }
+.timeline-seg-time { font-size: 12px; opacity: 0.85; margin-bottom: 2px; letter-spacing: 0.05em; font-weight: 500; }
+.timeline-seg-name { font-size: 14px; line-height: 1.25; font-weight: 700; padding: 0 4px; }
+.timeline-seg-mins { font-size: 11px; margin-top: 4px; opacity: 0.85; letter-spacing: 0.05em; }
+
+/* 刻度尺 */
+.timeline-scale {
+  position: relative; height: 22px; margin-top: 6px;
+}
+.timeline-scale span {
+  position: absolute; font-size: 12px;
+  color: var(--text); opacity: 0.55; font-weight: 600;
+  transform: translateX(-50%); letter-spacing: 0.05em;
+}
+.timeline-scale span:first-child { transform: translateX(0); }
+.timeline-scale span:last-child { transform: translateX(-100%); }
+
+.section { margin-bottom: 96px; background: var(--card); border-radius: 18px; border: 2px solid var(--subtle); overflow: visible; transition: box-shadow 0.3s; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28); scroll-snap-align: start; scroll-margin-top: 90px; }
+/* 子卡片：每個 h3 子段獨立成卡，視覺上像翻頁 */
+.sub-card {
+  background: var(--paper);
+  border: 1.5px solid var(--text);
+  border-radius: 8px;
+  padding: 36px 40px 40px;
+  margin: 36px 0;
+  box-shadow: 3px 3px 0 var(--accent3);
+}
+.sub-card.alt { box-shadow: 3px 3px 0 var(--accent2); background: var(--cream); }
+.sub-card.alt2 { box-shadow: 3px 3px 0 var(--accent4); }
+.sub-card > h3:first-child,
+.sub-card > h4:first-child { margin-top: 0; }
+@media (max-width: 768px) {
+  .sub-card { padding: 24px 22px 28px; margin: 28px 0; }
+}
+
+/* 出血橫幅當段落分隔 */
+.bleed-banner {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  background: var(--accent);
+  color: #FFF8DC;
+  padding: 64px 28px;
+  text-align: center;
+  font-family: "Noto Serif TC", serif;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+  margin-top: 80px;
+  margin-bottom: 80px;
+  border-radius: 0;
+  box-shadow: 0 4px 24px rgba(58, 46, 42, 0.18);
+  position: relative;
+}
+.bleed-banner-label {
+  display: inline-block;
+  background: #FFF8DC;
+  color: var(--accent-deep);
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-family: "Noto Sans TC", sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  font-weight: 700;
+  margin-bottom: 22px;
+}
+.bleed-banner strong { color: #FFE6B8; }
+@media (max-width: 768px) {
+  .bleed-banner { font-size: 24px; padding: 48px 20px; margin-top: 60px; margin-bottom: 60px; }
+}
+.section.open .section-body { max-height: none !important; transition: none !important; }
+.section-body-inner { padding: 24px 48px 56px 48px !important; }
+html { scroll-snap-type: y proximity; }
+.hero, .ogsm, .timeline { scroll-snap-align: start; scroll-margin-top: 90px; margin-bottom: 96px; }
+.section-header { padding: 36px 40px; }
+.section:hover { box-shadow: 0 4px 20px rgba(93, 64, 55, 0.1); }
+.section-header { padding: 28px 36px; cursor: pointer; display: flex; align-items: center; gap: 24px; background: var(--card); transition: background 0.2s; border-left: 6px solid var(--accent); }
+.section-header:hover { background: var(--card-deep); }
+.section-time { font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: 0.08em; background: var(--highlight-bg); padding: 8px 16px; border-radius: 8px; white-space: nowrap; min-width: 130px; text-align: center; }
+.section-title-block { flex: 1; }
+.section-title { font-size: 36px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; line-height: 1.3; margin-bottom: 8px; }
+.section-summary { font-size: 18px; color: var(--text); opacity: 0.7; font-weight: 400; line-height: 1.6; }
+.toggle-icon { font-size: 32px; color: var(--accent); transition: transform 0.3s; font-weight: 300; flex-shrink: 0; }
+.section.open .toggle-icon { transform: rotate(45deg); }
+.section-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
+.section.open .section-body { max-height: 16000px; transition: max-height 0.6s ease-in; }
+.section-body-inner { padding: 8px 36px 40px 66px; border-top: 1px solid var(--subtle); margin-top: 0; }
+
+.section.interaction .section-header { border-left-color: var(--accent-deep); background: linear-gradient(135deg, var(--card) 0%, var(--card-deep) 100%); }
+.section.reveal .section-header { border-left-color: var(--accent-deep); background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%); }
+.section.reveal .section-title, .section.reveal .section-summary { color: #FFF8DC; }
+.section.reveal .section-summary { opacity: 0.9; }
+.section.reveal .section-time { background: rgba(255,248,220,0.25); color: #FFF8DC; }
+.section.reveal .toggle-icon { color: #FFF8DC; }
+
+h3 { font-size: 26px; font-weight: 700; color: var(--text); margin-top: 32px; margin-bottom: 16px; letter-spacing: 0.02em; }
+h3:first-child { margin-top: 24px; }
+h4 { font-size: 22px; font-weight: 600; color: var(--text); margin-top: 24px; margin-bottom: 12px; }
+
+.section-body p, .section-body ul, .section-body ol { font-size: 20px; color: var(--text); line-height: 1.85; margin-bottom: 16px; }
+.section-body ul, .section-body ol { padding-left: 28px; }
+.section-body li { margin-bottom: 10px; }
+
+/* 一般內文重點：深咖（不要太橘） */
+strong, b { color: var(--text); font-weight: 700; }
+/* 金句裡的重點才橘紅 */
+.quote-box strong, .quote-box b { color: var(--accent); }
+a { color: var(--accent-deep); font-weight: 600; }
+a:hover { color: var(--accent); }
+
+.quote-box { position: relative; background: var(--highlight-bg-strong); border-left: 5px solid var(--accent); padding: 30px 36px 32px; margin: 28px 0; border-radius: 6px; font-size: 26px; font-style: italic; color: var(--text); font-weight: 600; line-height: 1.7; letter-spacing: 0.04em; }
+.quote-label { display: inline-block; font-size: 13px; font-style: normal; font-weight: 700; color: #FFF8DC; background: var(--accent); padding: 5px 14px; border-radius: 20px; letter-spacing: 0.25em; margin-bottom: 16px; vertical-align: middle; }
+
+.tip-box { background: rgba(212, 165, 116, 0.12); border: 2px dashed var(--accent-light); padding: 20px 24px; margin: 24px 0; border-radius: 10px; font-size: 18px; color: var(--text); }
+.tip-box-label { font-weight: 700; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 6px; font-size: 16px; }
+
+/* 延伸閱讀框 */
+.further-reading {
+  background: linear-gradient(135deg, var(--card-deep) 0%, var(--card) 100%);
+  border: 1.5px solid var(--accent-light);
+  padding: 22px 26px; margin: 24px 0;
+  border-radius: 12px;
+}
+.further-reading-label {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 800;
+  color: #FFF8DC;
+  background: var(--accent);
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.18em;
+  margin-bottom: 14px;
+}
+.further-reading ul { font-size: 17px; padding-left: 22px; line-height: 1.6; margin: 0; }
+.further-reading li { margin-bottom: 8px; }
+.further-reading a { color: var(--accent-deep); text-decoration: none; border-bottom: 1px dotted var(--accent-light); }
+.further-reading a:hover { color: var(--accent); border-bottom-style: solid; }
+
+.demo-block { background: var(--bg); border: 1.5px solid var(--subtle); border-radius: 12px; padding: 24px 28px; margin: 20px 0; }
+.demo-block-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+.demo-block-title::before { content: "▶"; color: var(--accent); font-size: 18px; }
+
+.story-box { background: linear-gradient(135deg, var(--card-deep) 0%, var(--card) 100%); border: 1.5px solid var(--subtle); border-radius: 12px; padding: 28px 32px; margin: 24px 0; }
+.story-box-title { font-size: 20px; font-weight: 700; color: var(--accent-deep); margin-bottom: 14px; letter-spacing: 0.05em; }
+.story-box p { font-size: 19px; }
+
+/* 招商區塊 */
+.partner-card {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+  color: #FFF8DC;
+  padding: 40px 36px;
+  border-radius: 16px;
+  margin: 28px 0;
+  box-shadow: 0 8px 32px rgba(62, 39, 23, 0.18);
+}
+.partner-card h3 { color: #FFF8DC; font-size: 28px; font-weight: 800; margin: 0 0 12px; }
+.partner-card p { color: #FFF8DC; opacity: 0.95; font-size: 18px; margin-bottom: 14px; }
+.partner-card strong { color: #FFE6B8; }
+.partner-card .partner-table { background: rgba(255,248,220,0.1); padding: 18px 22px; border-radius: 10px; margin-top: 16px; font-size: 16px; }
+.partner-card .partner-table div { margin-bottom: 8px; }
+
+.cta-card { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%); color: #FFF8DC; padding: 48px 40px; border-radius: 16px; margin: 32px 0; text-align: center; box-shadow: 0 8px 32px rgba(62, 39, 23, 0.18); }
+.cta-card h3 { color: #FFF8DC; font-size: 32px; font-weight: 800; margin-bottom: 16px; margin-top: 0; }
+.cta-card .cta-meta { font-size: 22px; margin-bottom: 24px; letter-spacing: 0.08em; opacity: 0.95; }
+.cta-card .cta-line { font-size: 24px; font-style: italic; font-weight: 600; margin-top: 24px; letter-spacing: 0.06em; }
+
+footer { margin-top: 72px; padding: 48px 36px; border-top: 2px solid var(--subtle); text-align: center; color: var(--text); opacity: 0.6; font-size: 16px; letter-spacing: 0.1em; }
+
+.font-control { position: fixed; bottom: 32px; right: 32px; display: flex; gap: 6px; background: var(--card); border: 1.5px solid var(--subtle); border-radius: 12px; padding: 8px; box-shadow: 0 4px 16px rgba(93, 64, 55, 0.15); opacity: 0.45; transition: opacity 0.3s; z-index: 100; }
+.font-control:hover { opacity: 1; }
+.font-control button { background: transparent; border: none; color: var(--text); width: 40px; height: 40px; border-radius: 8px; font-size: 18px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+.font-control button:hover { background: var(--accent-light); color: #fff; }
+
+table.simple-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 18px; }
+table.simple-table th, table.simple-table td { padding: 12px; border: 1px solid var(--subtle); text-align: left; }
+table.simple-table th { background: var(--card-deep); }
+
+@media (max-width: 768px) {
+  body { font-size: 18px; }
+  .top-bar { padding: 14px 20px; }
+  .top-bar-title { font-size: 18px; }
+  .top-bar-title small { display: block; margin-left: 0; margin-top: 4px; font-size: 14px; }
+  .top-nav a { font-size: 15px; padding: 6px 10px; }
+  .container { padding: 32px 20px 80px; }
+  .hero { padding: 32px 0 24px; }
+  .hero h1 { font-size: 36px; }
+  .hero-subtitle { font-size: 18px; }
+  .hero-quote { font-size: 22px; padding: 18px 24px; }
+  .ogsm { padding: 24px 22px; }
+  .ogsm-grid { grid-template-columns: 1fr; }
+  .ogsm-title { font-size: 20px; }
+  .section-header { padding: 20px 22px; flex-wrap: wrap; gap: 12px; }
+  .section-time { font-size: 15px; min-width: auto; padding: 6px 12px; }
+  .section-title { font-size: 26px; }
+  .section-summary { font-size: 17px; }
+  .section-body-inner { padding: 8px 22px 28px 22px; }
+  .quote-box { font-size: 22px; padding: 20px 24px; }
+  .section-body p, .section-body ul, .section-body ol { font-size: 17px; }
+  h3 { font-size: 22px; }
+  h4 { font-size: 19px; }
+  .cta-card h3 { font-size: 26px; }
+  .cta-card .cta-meta { font-size: 18px; }
+  .cta-card .cta-line { font-size: 20px; }
+  .partner-card { padding: 28px 22px; }
+  .partner-card h3 { font-size: 22px; }
+
+  /* mobile 時間軸：水平條改成垂直堆疊 */
+  .timeline-bar { flex-direction: column; height: auto; }
+  .timeline-segment { flex: none !important; height: 60px; border-right: none; border-bottom: 1.5px solid rgba(255, 248, 220, 0.4); flex-direction: row; justify-content: space-between; padding: 12px 18px; }
+  .timeline-segment:last-child { border-bottom: none; }
+  .timeline-seg-time { margin-bottom: 0; font-size: 13px; }
+  .timeline-seg-name { font-size: 14px; text-align: left; flex: 1; padding: 0 12px; }
+  .timeline-seg-name br { display: none; }
+  .timeline-seg-mins { margin-top: 0; font-size: 12px; }
+  .timeline-scale { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- 頂部固定 Bar -->
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div class="top-bar-title">5/5 創業點子驗證術 <small>2026-05-05（二）19:00–21:00 ｜ 嘉我好漾</small></div>
+    <nav class="top-nav">
+      <a href="#sec-0">〇、開場</a>
+      <a href="#sec-1">一、整理想法</a>
+      <a href="#sec-int">互動</a>
+      <a href="#sec-2">二、測市場反應</a>
+      <a href="#sec-3">三、做 MVP</a>
+      <a href="#sec-4">四、建 AI 助理</a>
+      <a href="#sec-5">五、QA 時間</a>
+    </nav>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-meta">2026 / 05 / 05 ｜ 嘉我好漾 ｜ 線上 120 分鐘</div>
+    <h1>創業點子驗證術<br>AI 幫你試水溫</h1>
+    <div class="hero-subtitle">用 AI 輔助你的創業決策——從整理想法、驗證市場、做 MVP，到建一套可以持續用的 AI 助理</div>
+    <div class="hero-quote">不要學 AI 工具，要讓 AI 工具來學你</div>
+    <br>
+    <a class="hero-cta" href="https://www.accupass.com/event/2604200222222932743750" target="_blank">嘉我好漾 系列報名頁 ↗</a>
+  </section>
+
+  <!-- OGSM 表 -->
+  <section class="ogsm">
+    <div class="ogsm-title">OGSM ｜ 這堂課要做什麼？</div>
+    <div class="ogsm-subtitle">隱藏主軸：整堂課 = 江江在示範一套可以「跟夥伴一起合推」的 AI 助教 MVP（最後 5 分鐘揭曉招商意圖）</div>
+    <div class="ogsm-grid">
+
+      <div class="ogsm-cell">
+        <div class="ogsm-cell-label">O ｜ OBJECTIVE</div>
+        <div class="ogsm-cell-title">2 小時帶 20–30 位微型創業／斜槓族走完一個輔助決策的完整循環</div>
+        <ul>
+          <li>整理想法 → 驗證市場 → 做 MVP → 建 AI 助理</li>
+          <li>體感過「文件就是系統」「讓工具學你」</li>
+          <li><strong>讓有渠道、有社群的人察覺這套東西可以一起合推</strong></li>
+        </ul>
+      </div>
+
+      <div class="ogsm-cell">
+        <div class="ogsm-cell-label">G ｜ GOAL</div>
+        <div class="ogsm-cell-title">可以驗證的具體目標</div>
+        <ul>
+          <li>學員能複述「不要學工具，要讓工具學你」</li>
+          <li>1/2 互動節點：≥ 80% 學員回答</li>
+          <li>結尾揭曉時聊天室有人 click：「啊原來整堂課就是 MVP」</li>
+          <li>課後 ≥ 5 位學員下載技能包</li>
+          <li><strong>≥ 1 位學員或社群窗口課後私訊問「能不能一起合推」</strong></li>
+        </ul>
+      </div>
+
+      <div class="ogsm-cell">
+        <div class="ogsm-cell-label">S ｜ STRATEGY</div>
+        <div class="ogsm-cell-title">怎麼做才會打中</div>
+        <ul>
+          <li>開場 18 分鐘前移 AI 趨勢，建認知框架</li>
+          <li>第一段用「三個 AI 顧問同時拷問同一份企劃」當主示範（最有體感）</li>
+          <li>中段插一個聊天室投票「1=網頁版用戶 / 2=有資料累積」，照投票結果決定後半段要不要帶桌面版 Codex</li>
+          <li>桌面版只當預告，主用網頁版（學員門檻低）</li>
+          <li>整堂課 = MVP，最後揭曉<strong>並開放合推</strong></li>
+        </ul>
+      </div>
+
+      <div class="ogsm-cell">
+        <div class="ogsm-cell-label">M ｜ MEASURE</div>
+        <div class="ogsm-cell-title">課中／課後要觀察什麼</div>
+        <ul>
+          <li>1/2 投票回 1 vs 2 的比例（決定後兩堂深度）</li>
+          <li>結尾揭曉時聊天室反應強度</li>
+          <li>課後技能包下載人數</li>
+          <li>七七／依寧課後是否主動提後續合作</li>
+          <li><strong>有沒有學員主動接「合推 AI 辦公室」這條線</strong></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- OGSM 框架說明（折疊） -->
+    <details style="margin-top: 28px;">
+      <summary style="cursor: pointer; padding: 18px 24px; background: var(--card-deep); border-radius: 10px; font-size: 18px; font-weight: 700; color: var(--accent); border-left: 4px solid var(--accent); letter-spacing: 0.05em; list-style: none;">📖 點開 ｜ OGSM 是什麼？不知道沒關係，AI 知道。但你要知道哪些事 AI 不會知道。</summary>
+
+      <div style="margin-top: 16px; padding: 28px 32px; background: var(--card); border: 1px solid var(--subtle); border-radius: 12px; line-height: 1.8;">
+
+        <p style="font-size: 18px; margin-bottom: 18px;"><strong style="color: var(--accent);">OGSM</strong> 是經典策略管理框架，把「我想做的事」拆成四層：</p>
+
+        <table class="simple-table" style="font-size: 16px;">
+          <tr><th>字母</th><th>意思</th><th>在問什麼</th></tr>
+          <tr><td><strong style="color: var(--accent); font-size: 20px;">O</strong></td><td>Objective 目的</td><td>為什麼要做？成功是什麼樣子？</td></tr>
+          <tr><td><strong style="color: var(--accent); font-size: 20px;">G</strong></td><td>Goal 目標</td><td>要達成什麼可衡量的成果？</td></tr>
+          <tr><td><strong style="color: var(--accent); font-size: 20px;">S</strong></td><td>Strategy 策略</td><td>用什麼方法達成？</td></tr>
+          <tr><td><strong style="color: var(--accent); font-size: 20px;">M</strong></td><td>Measure 衡量</td><td>怎麼知道有沒有走在軌道上？</td></tr>
+        </table>
+
+        <div class="quote-box" style="font-size: 22px; margin-top: 24px;">
+          <span class="quote-label">重點</span>
+          這種框架你不熟沒關係——<strong style="color: var(--accent);">直接丟給 AI，它都知道</strong>。
+        </div>
+
+        <h4 style="color: var(--accent); margin-top: 32px; margin-bottom: 14px; font-size: 24px;">真正進階的能力：知道「什麼是 AI 不會知道的」</h4>
+
+        <p style="font-size: 18px;">會用 AI 的第一階段，是知道「<strong>什麼東西可以丟給 AI</strong>」（OGSM 這類公開框架就是）。</p>
+
+        <p style="font-size: 18px;"><strong style="color: var(--accent);">更厲害的人，是知道「什麼東西 AI 不會知道」</strong>——這部分你不主動補，AI 永遠生不出對的答案。</p>
+
+        <p style="font-size: 18px;">AI 不會知道的，主要是這三類：</p>
+
+        <ul style="font-size: 18px;">
+          <li><strong>個人的隱性知識</strong>（你的經驗、你的判斷、你怎麼做決定的內在邏輯）</li>
+          <li><strong>特定專業領域的領域知識</strong>（你那個小行業裡只有圈內人知道的眉角）</li>
+          <li><strong>超級基本的常識</strong>（你以為大家都懂、根本不會寫下來的那種事）</li>
+        </ul>
+
+      </div>
+    </details>
+
+  </section>
+
+  <!-- 時間配置 -->
+  <section class="timeline">
+    <div class="timeline-title">⏱ 120 分鐘時間軸</div>
+    <div class="timeline-subtitle">每段比例就是實際時長，越深的咖啡色 = 越往後的段落</div>
+
+    <div class="timeline-bar">
+      <a class="timeline-segment s0" href="#sec-0" style="flex: 20">
+        <div class="timeline-seg-time">00 — 20</div>
+        <div class="timeline-seg-name">〇、開場敲鐘<br>＋ AI 趨勢＋課前調查</div>
+        <div class="timeline-seg-mins">20 分</div>
+      </a>
+      <a class="timeline-segment s1" href="#sec-1" style="flex: 25">
+        <div class="timeline-seg-time">20 — 45</div>
+        <div class="timeline-seg-name">一、整理創業點子<br>（三視角拷問）</div>
+        <div class="timeline-seg-mins">25 分</div>
+      </a>
+      <a class="timeline-segment s2" href="#sec-int" style="flex: 5">
+        <div class="timeline-seg-time">45 — 50</div>
+        <div class="timeline-seg-name">互動</div>
+        <div class="timeline-seg-mins">5 分</div>
+      </a>
+      <a class="timeline-segment s3" href="#sec-2" style="flex: 25">
+        <div class="timeline-seg-time">50 — 75</div>
+        <div class="timeline-seg-name">二、測市場反應<br>（用 AI 模擬）</div>
+        <div class="timeline-seg-mins">25 分</div>
+      </a>
+      <a class="timeline-segment s4" href="#sec-3" style="flex: 15">
+        <div class="timeline-seg-time">75 — 90</div>
+        <div class="timeline-seg-name">三、做 ＭＶＰ<br>＋ Portaly</div>
+        <div class="timeline-seg-mins">15 分</div>
+      </a>
+      <a class="timeline-segment s5" href="#sec-4" style="flex: 25">
+        <div class="timeline-seg-time">90 — 115</div>
+        <div class="timeline-seg-name">四、建 AI 助理</div>
+        <div class="timeline-seg-mins">25 分</div>
+      </a>
+      <a class="timeline-segment s6" href="#sec-5" style="flex: 5">
+        <div class="timeline-seg-time">115 — 120</div>
+        <div class="timeline-seg-name">五、QA 時間</div>
+        <div class="timeline-seg-mins">5 分</div>
+      </a>
+    </div>
+
+    <div class="timeline-scale">
+      <span style="left: 0%">00</span>
+      <span style="left: 16.67%">20</span>
+      <span style="left: 37.5%">45</span>
+      <span style="left: 41.67%">50</span>
+      <span style="left: 62.5%">75</span>
+      <span style="left: 75%">90</span>
+      <span style="left: 95.83%">115</span>
+      <span style="left: 100%">120</span>
+    </div>
+  </section>
+
+  <!-- 段落 〇 -->
+  <section class="section open theme-light" id="sec-0">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-time">20 分鐘</span>
+      <div class="section-title-block">
+        <div class="section-title">〇、開場敲鐘 ＋ AI 趨勢 ＋ 課前調查</div>
+        <div class="section-summary">自介 → AI 三年大突變 ＋ 主辦課前調查（62 位學員背景與三大痛點）→ 我以前怎麼驗證點子（信任感的消耗）→ 兩件人生很難的事</div>
+      </div>
+      <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <h3>0-A 自介 + AI 三年大突變（5 分）</h3>
+        <p>我是<strong>江江教練</strong>，隱性知識提煉師、AI 應用規劃師。簡單說，幫專業工作者把腦袋裡的東西提煉成 AI 可以用的形式。</p>
+
+        <div style="text-align: center; margin: 28px 0;">
+          <img src="./jiang-coach.jpg" alt="江江教練" style="max-width: 100%; width: 480px; height: auto; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.35); border: 4px solid var(--card-deep);">
+        </div>
+
+        <h4>2024 → 2025 → 2026</h4>
+        <ul>
+          <li><strong>2024 試水溫</strong>：大家開始用 ChatGPT 聊天</li>
+          <li><strong>2025 風潮起</strong>：各行各業都在談 AI、Vibe Coding 熱</li>
+          <li><strong>2026 大突變</strong>：AI 從「聊天」變「幹活」（Agent、桌面版引爆）</li>
+        </ul>
+
+        <p><strong>類比</strong>：這就像拍攝自媒體。數位單眼時代要學快門對焦，手機時代會拍就好。AI 也進入同樣的轉折。</p>
+
+        <div class="demo-block" style="border-color: var(--accent); background: var(--highlight-bg);">
+          <div class="demo-block-title" style="color: var(--accent);">現場互動 ｜ 三個提問</div>
+
+          <p style="font-size: 20px; margin-top: 18px;"><strong>Q1：</strong>大家知道什麼是 <strong style="color: var(--accent);">Vibe Coding</strong> 嗎？</p>
+          <details style="margin: 6px 0 22px 0;">
+            <summary style="cursor: pointer; font-size: 16px; color: var(--accent-deep); padding: 8px 14px; background: var(--card-deep); border-radius: 8px; display: inline-block; list-style: none; font-weight: 600;">▸ 點開 ｜ 江江的回答</summary>
+            <div style="padding: 16px 20px; background: var(--card); border-radius: 10px; margin-top: 8px; font-size: 17px; line-height: 1.7; border-left: 3px solid var(--accent);">
+              Vibe Coding 是 2025 年很紅的詞——<strong>用自然語言寫程式、讓 AI 邊聊邊生出能跑的東西</strong>。重點不在學會這個工具，而是看你<strong>要解決的問題是什麼</strong>，等下會展開。
+            </div>
+          </details>
+
+          <p style="font-size: 20px;"><strong>Q2：</strong>大家知道什麼是 <strong style="color: var(--accent);">Agent</strong> 嗎？</p>
+          <details style="margin: 6px 0 22px 0;">
+            <summary style="cursor: pointer; font-size: 16px; color: var(--accent-deep); padding: 8px 14px; background: var(--card-deep); border-radius: 8px; display: inline-block; list-style: none; font-weight: 600;">▸ 點開 ｜ 江江的回答</summary>
+            <div style="padding: 16px 20px; background: var(--card); border-radius: 10px; margin-top: 8px; font-size: 17px; line-height: 1.7; border-left: 3px solid var(--accent);">
+              Agent 是<strong>會幫你幹活的 AI</strong>——不只聊天回答你，還會自己讀檔、操作工具、跨步驟完成任務。今年（2026）真正的大突變，就是 Agent 從實驗品變成日常工具。
+            </div>
+          </details>
+
+          <p style="font-size: 20px;"><strong>Q3：</strong>會不會覺得<strong style="color: var(--accent);">一堆 AI 工具學不完</strong>？</p>
+          <details style="margin: 6px 0 0 0;">
+            <summary style="cursor: pointer; font-size: 16px; color: var(--accent-deep); padding: 8px 14px; background: var(--card-deep); border-radius: 8px; display: inline-block; list-style: none; font-weight: 600;">▸ 點開 ｜ 江江的回答</summary>
+            <div style="padding: 18px 22px; background: var(--card); border-radius: 10px; margin-top: 8px; font-size: 17px; line-height: 1.85; border-left: 3px solid var(--accent);">
+              AI 工具學不完，但<strong>不是工具學不完</strong>。<br><br>
+              是每天 AI 相關的論文、產業資訊，每天幾百篇。你學完，明天又出新的。<br><br>
+              有句話講得很好：<br>
+              <strong style="color: var(--accent);">「你只要學得夠慢，就不用學了。」</strong><br>
+              因為等你還沒學完，那個工具已經被淘汰了。<br><br>
+              難道就直接<strong>躺平</strong>嗎？<br><br>
+              我這邊先講一個概念：<br>
+              <strong>AI 那麼厲害，那讓 AI 來學我，不就好了嗎？</strong><br><br>
+              <strong style="color: var(--accent); font-size: 19px;">幹嘛那麼累，到處去學 AI？</strong>
+            </div>
+          </details>
+        </div>
+
+        <h4 style="color: var(--accent); margin-top: 36px;">江江對 Vibe Coding 的看法 ｜ 第一性原理</h4>
+
+        <p>很多人卡在「我要學會這個工具，才能解決我的問題」。但你回到第一性原理問——<strong>「我要解決的是什麼問題？」</strong>——你會發現很多時候，你根本不需要學那個工具，AI 直接幫你做就好。</p>
+
+        <div class="quote-box" style="font-size: 22px;">
+          <span class="quote-label">第一性原理</span>
+          如果你只是想<strong style="color: var(--accent);">練習、學習寫程式</strong>，那 Vibe Coding 是很好的學習方式。<br>
+          但如果你真的想<strong style="color: var(--accent);">解決問題</strong>——<br>
+          其實直接叫 AI 解決問題就好了。
+        </div>
+
+        <p><strong>為什麼一人公司、微型創業最需要這個觀念</strong>：你最缺的不是學更多工具，是把自己想清楚、寫清楚，讓 AI 照你的規則做事。</p>
+
+        <div class="further-reading">
+          <span class="further-reading-label">📚 延伸閱讀</span>
+          <ul>
+            <li><a href="https://vocus.cc/article/693e8627fd8978000148f322" target="_blank">AI 工具轉換無痛指南：建立個人知識庫，擺脫平臺綁架</a>（為什麼要把基底做在自己身上）</li>
+            <li><a href="https://vocus.cc/article/68f6fa93fd89780001e0aa7e" target="_blank">AI 培訓前先問：他們是「需要用」還是「想用」？</a>（任務導向 vs 熱情導向兩套策略）</li>
+          </ul>
+        </div>
+
+        <h4 style="margin-top: 40px;">順便講一下：什麼是 MVP？</h4>
+
+        <div class="bleed-banner">
+          <div class="bleed-banner-label">核 心 概 念</div>
+          <div>不要去學 AI 工具，<br><strong>要讓 AI 工具來學你。</strong></div>
+        </div>
+
+        <h3>0-B 我以前是怎麼驗證點子的（10 分）</h3>
+
+        <p>我自己是一個發想很快的人。以前驗證新點子的方式就是，想到一個。約人聊一聊。看反應。再修。</p>
+        <p>那時候我覺得：<strong>「不去聊怎麼知道？而且去聊我也學到事情。」</strong></p>
+        <p>但這樣到處跑，<strong>很累</strong>。</p>
+
+        <div class="quote-box">
+          消耗的不只是<strong style="color: var(--accent);">彼此時間</strong>，<br>
+          還有<strong style="color: var(--accent);">信任感</strong>。
+        </div>
+
+        <details style="margin: 24px 0;">
+          <summary style="cursor: pointer; padding: 16px 22px; background: var(--cream); border-radius: 8px; font-size: 17px; font-weight: 700; color: var(--accent-deep); border-left: 4px solid var(--accent); list-style: none; font-family: 'Noto Serif TC', serif;">
+            ▸ 點開 ｜ 為什麼是「AI 顧問」？怎麼運作？（背景說明）
+          </summary>
+          <div style="margin-top: 16px;">
+
+            <h4>轉折：用 AI 顧問先過一輪</h4>
+            <p>現在我習慣是，有一個想法，<strong>先丟給 AI 顧問問一輪</strong>。</p>
+            <p>大部分問題我自己都答不出來。連最基本的都答不出來，那就<strong>不用玩了</strong>。</p>
+            <p>光是這幾段，就省下大量奔波的時間，更重要的是<strong>保住了信任額度</strong>。</p>
+
+            <div class="story-box">
+              <div class="story-box-title">這段要帶出的觀念</div>
+              <p>AI 在這裡做的事，是<strong>在你還沒花社交成本之前，先逼你回答最基本的問題</strong>。</p>
+              <p>它的提問，就是真實人類也會問你的問題。<strong>連基本問題都答不出來＝你還沒準備好出去聊</strong>。這是創業者最容易忽略的「事前過濾」。</p>
+            </div>
+
+            <h4>怎麼讓 AI 靈魂拷問你？</h4>
+            <p>很簡單。比如我現在有一個想法，<strong>叫 AI 模擬產業內的人來問我</strong>。</p>
+            <p>不需要找多大的專家。也不用先去拜訪那個產業裡誰是大神。</p>
+          </div>
+        </details>
+
+        <div class="demo-block" style="border-color: var(--accent2); background: rgba(92, 117, 96, 0.08);">
+          <div class="demo-block-title" style="color: var(--accent2);">兩個納瓦爾 AI 顧問 ｜ 課堂可以直接點開試</div>
+          <p style="margin-top: 14px;">想當場感受「AI 顧問靈魂拷問你」是什麼感覺？這兩個我都已經做好了，學員可以馬上點：</p>
+
+          <div style="display: grid; gap: 14px; margin-top: 18px;">
+            <div style="padding: 16px 20px; background: var(--paper); border: 1.5px solid var(--text); border-radius: 8px;">
+              <div style="font-weight: 700; font-size: 18px; margin-bottom: 6px;">🟢 簡單試用版（Gemini GEM）</div>
+              <div style="font-size: 16px; opacity: 0.85; margin-bottom: 8px;">直接點開、馬上能聊。免下載、免裝機。</div>
+              <a href="https://gemini.google.com/gem/925f456cba18" target="_blank" style="font-size: 15px; word-break: break-all;">https://gemini.google.com/gem/925f456cba18</a>
+            </div>
+
+            <div style="padding: 16px 20px; background: var(--paper); border: 1.5px solid var(--text); border-radius: 8px;">
+              <div style="font-weight: 700; font-size: 18px; margin-bottom: 6px;">⭐ 完整版技能包（GitHub 開源）</div>
+              <div style="font-size: 16px; opacity: 0.85; margin-bottom: 8px;">想深度玩、裝進自己的 Claude / Codex 用。</div>
+              <div style="font-size: 15px;">
+                中文 v2.2：<a href="https://github.com/Jiang-Yude/naval-ravikant-skill" target="_blank" style="word-break: break-all;">github.com/Jiang-Yude/naval-ravikant-skill</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4>直接下這個指令給 AI</h4>
+
+        <div class="demo-block">
+          <div class="demo-block-title">提示詞範本（我最一開始下給 AI 的指令）</div>
+          <div style="font-family: 'Courier New', 'Noto Sans TC', monospace; font-size: 16px; line-height: 1.95; background: var(--cream); padding: 20px 24px; border-radius: 8px; color: var(--text); border-left: 3px solid var(--accent);">
+            我有一個想法：<u>（用一句話寫你的想法）</u>。<br><br>
+            請你：<br>
+            1. 幫我<strong>調查這個產業相關的知識</strong>。<br>
+            2. <strong>模擬這個產業裡的人</strong>，假設我現在要跟他聊我的想法，他會有哪些疑問跟問題來問我？<br>
+            3. 幫我把<strong>隱藏的風險</strong>都找出來。<br>
+            4. 列出我<strong>需要注意的事</strong>、<strong>需要準備的內容</strong>、<strong>該採取的策略</strong>。<br>
+            5. 確保我可以順利執行，不會踩雷。
+          </div>
+        </div>
+
+        <h4>AI 還有一個非常厲害的能力：翻譯</h4>
+
+        <p>所謂的翻譯，<strong>不只是中翻英、英翻中</strong>。</p>
+
+        <p>更重要的是這兩種：</p>
+
+        <ul>
+          <li>把<strong>創業者的語言</strong>，翻譯成<strong>市場能懂的語言</strong></li>
+          <li>把<strong>市場的語言</strong>，翻譯成<strong>能夠賺錢的訊號</strong></li>
+        </ul>
+
+        <div class="quote-box">
+          創業者腦袋裡常常是「我要做什麼」，<br>
+          但市場聽不懂。<br>
+          AI 可以幫你<strong style="color: var(--accent);">在這兩種語言之間翻譯</strong>。
+        </div>
+
+        <div class="further-reading">
+          <span class="further-reading-label">📚 延伸閱讀</span>
+          <ul>
+            <li><a href="https://www.threads.net/@thedav1035" target="_blank">脆文：我這樣用 AI 幫我輔助決策</a>（4/30，AI 顧問靈魂拷問完整案例）</li>
+          </ul>
+        </div>
+
+        <h3>0-C 鋪墊觀點：人這輩子有兩件事很難（3 分）</h3>
+
+        <div class="quote-box">
+          <span class="quote-label">觀點</span>
+          人這輩子有兩件事很難做到——<br>
+          <strong style="color: var(--accent);">認識自己、知道自己在這個世界上的位置。</strong><br>
+          AI 都可以很好的幫忙做這兩件事。
+        </div>
+
+        <ul>
+          <li><strong>認識自己</strong> → 讓 AI 幫你<strong>分析出自己的軌跡、特色</strong></li>
+          <li><strong>知道自己的位置</strong> → AI 是大語言模型，把全世界的資料丟進去，它有一個超大的資料庫，知道大部分人在什麼狀態。你只要拿自己的資料跟 AI 對比，就能知道你<strong>大概在什麼位置、什麼層級</strong>。</li>
+        </ul>
+
+        <p>今天兩小時就在演示這兩件事怎麼用 AI 做。</p>
+
+        <div class="further-reading">
+          <span class="further-reading-label">📚 延伸閱讀</span>
+          <ul>
+            <li><a href="https://vocus.cc/article/693e8627fd8978000148f322" target="_blank">建立個人知識庫，擺脫平臺綁架｜從 ChatGPT 無痛轉移到任何 AI｜個人設定檔</a>（認識自己）</li>
+            <li><a href="https://vocus.cc/article/699bc518fd89780001ada2ae" target="_blank">兩招解決 AI 資訊焦慮：做自己的學習地圖，加一份個人設定檔</a>（知道自己在哪裡）</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 段落 一 -->
+  <section class="section open theme-dark" id="sec-1">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-time">25 分鐘</span>
+      <div class="section-title-block">
+        <div class="section-title">一 用 AI 顧問整理你的創業想法</div>
+        <div class="section-summary">用 AI 顧問靈魂拷問（納瓦爾＋真實需求調查）→ 大師到電腦裡找你的盲點（我的真實經歷：年初目標偏離 80%）</div>
+      </div>
+      <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <h3>段落核心問題</h3>
+        <p>大家覺得市場有需求，但<strong>真的有嗎？</strong>把模糊的點子，用 AI 顧問對話一輪 → 變成清楚的商業假設。</p>
+
+        <h3>1-A 先示範：自己的版本要先寫好（2 分）</h3>
+        <p>打開 Mika 桌面寵物開發計畫 .md 給學員看。重點不是內容，是讓學員感受到：</p>
+        <div class="quote-box">
+          <span class="quote-label">前提</span>
+          沒有自己的版本，AI 就只是在編。
+        </div>
+        <p>AI 顧問<strong>不是用來發想的，是用來拷問已經寫好的版本</strong>。</p>
+
+        <h3>1-B 兩個 AI 顧問現場示範（18 分）</h3>
+
+        <p>用兩個方向不同的 AI 顧問拷問同一份企劃，看哪些地方<strong>兩邊都指到</strong>，那就是真盲點。</p>
+
+        <div class="demo-block">
+          <div class="demo-block-title">工具一：納瓦爾 AI 顧問（10 分）</div>
+          <p>把企劃丟進納瓦爾技能包，問：「這個計畫從你的視角看，有什麼盲點？」</p>
+          <p>納瓦爾通常會反問三件事：</p>
+          <ul>
+            <li>你在累積什麼？（十年的尺度）</li>
+            <li>這是專屬知識還是公地門面？</li>
+            <li>你用了什麼槓桿？有沒有 accountability？</li>
+          </ul>
+          <p style="margin-top: 12px; font-size: 18px; opacity: 0.8;">AI 顧問<strong>不會直接給答案，會反問</strong>。這是核心——它在幫你提問，不是幫你回答。</p>
+        </div>
+
+        <div class="demo-block">
+          <div class="demo-block-title">工具二：真實需求調查包（8 分）</div>
+          <p>切換技能包，丟同一份企劃，問同一個問題。但這次的視角是「<strong>真實的潛在客戶</strong>」。</p>
+          <p>它會用真實需求調查的標準問你：</p>
+          <ul>
+            <li>「你<strong>上次</strong>遇到這個問題是什麼時候？」</li>
+            <li>「你<strong>那時候怎麼解決</strong>？花了多少錢？」</li>
+            <li>「<strong>誰在主導</strong>這個決定？預算從哪來？」</li>
+            <li>「除了我，你還會去問誰？」</li>
+          </ul>
+          <p style="margin-top: 12px; font-size: 18px; opacity: 0.8;"><strong>同一份企劃，不同視角會看到不同的東西</strong>。納瓦爾看的是十年後的價值累積，真實需求調查看的是「現在到底有沒有人會買單」。兩個都需要。</p>
+        </div>
+
+        <h3>1-C 找交集，揭曉真盲點（3 分）</h3>
+        <p>把兩個顧問的輸出並列，標出<strong>兩邊都點到</strong>的地方。</p>
+        <p>Mika 案例的真實結果：兩邊同時指到一個我自己沒看到的盲點——<strong>「Mika 跟咪卡是不是同一個產品這件事沒寫清楚」</strong>。納瓦爾從「十年累積會被自己稀釋」說、真實需求調查從「客戶根本搞不清楚要買哪個」說。兩個說法不一樣，但指到同一件事。</p>
+
+        <div class="quote-box">
+          <span class="quote-label">觀點</span>
+          兩個 AI 顧問同時指到同一件事，那就是真盲點，不是噪音。
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-box-label">時間夠才帶 ｜ 真實人類壓測</div>
+          同一個 Mika 產品，4 月底也讓真實人類（吳星瑩）邊看邊講壓測。星星指出 5 點盲點，其中<strong>有 3 點是 AI 顧問抓不到的</strong>，像「『好貓』vs『乖貓』的世界觀違和」。<br><br>
+          <strong>觀點</strong>：AI 顧問抓得到邏輯盲點，真實人類抓得到世界觀盲點。兩條路都需要。
+        </div>
+
+        <h3>1-D 我的真實經歷：年初目標偏離 80%（2 分）</h3>
+        <p>2026 年 3 月，我把納瓦爾 AI 顧問裝進電腦，讓他去讀我過去半年所有工作日記（幾千份）。然後問他：「我最近的方向對嗎？」</p>
+
+        <div class="quote-box">
+          你年底要做的目標是 A。但我看了你這三個月的工作，你往 A 方向做的<strong style="color: var(--accent);">只有 20%</strong>，另外 80% 都分散掉了。如果是刻意的那沒問題，但如果你沒意識到，<strong style="color: var(--accent);">你要修正方向嗎？</strong>
+        </div>
+
+        <p>我以為自己很努力，到 3 月底才發現自己忙到又偏離主軸。這種盲點<strong>自己看不到，朋友也不會直接跟你說</strong>。但 AI 顧問可以——它讀完你所有資料、沒有情面包袱、站在大師立場說話、不會客氣。</p>
+
+
+        <div class="further-reading">
+          <span class="further-reading-label">📚 延伸閱讀</span>
+          <ul>
+            <li><a href="https://vocus.cc/article/68c7ce23fd89780001535f0c" target="_blank">看到好案例不知道怎麼學？四步驟複製大師級思維框架</a>（怎麼把大師做成 AI 顧問）</li>
+            <li><a href="https://vocus.cc/article/6921de38fd8978000119ceb2" target="_blank">把專業知識、工作經驗整理成「技能包」，讓 AI 來幫你操作</a>（技能包是什麼）</li>
+            <li><a href="https://vocus.cc/article/6915720cfd89780001605e7d" target="_blank">三層次會議記錄提示詞，把 AI 變成你的戰略分析師</a>（同一套用在會議分析上）</li>
+            <li>對外示範範本：<a href="https://meeting-template-deploy.vercel.app/" target="_blank">範本｜會議記錄 × 輔助決策 × 共識分析</a>（兩次會議態度軌跡的去敏感版）</li>
+          </ul>
+        </div>
+
+        <h3>學員帶回</h3>
+        <p>兩個技能包都已公開，課堂可以直接點開試用，也可以下載完整版裝進自己的 AI。</p>
+        <div style="display: grid; gap: 14px; margin-top: 14px;">
+          <div style="padding: 16px 20px; background: var(--paper); border: 1.5px solid var(--text); border-radius: 8px;">
+            <div style="font-weight: 700; font-size: 18px; margin-bottom: 6px;">納瓦爾 AI 顧問</div>
+            <div style="font-size: 16px; opacity: 0.85;">
+              🟢 試用：<a href="https://gemini.google.com/gem/925f456cba18" target="_blank" style="word-break: break-all;">gemini.google.com/gem/925f456cba18</a><br>
+              ⭐ 完整版：<a href="https://github.com/Jiang-Yude/naval-ravikant-skill" target="_blank" style="word-break: break-all;">github.com/Jiang-Yude/naval-ravikant-skill</a>
+            </div>
+          </div>
+          <div style="padding: 16px 20px; background: var(--paper); border: 1.5px solid var(--text); border-radius: 8px;">
+            <div style="font-weight: 700; font-size: 18px; margin-bottom: 6px;">真實需求調查包</div>
+            <div style="font-size: 16px; opacity: 0.85;">
+              📖 概念文章：<a href="https://vocus.cc/article/68c12abbfd89780001ed3ce2" target="_blank" style="word-break: break-all;">vocus.cc/.../68c12abbfd89780001ed3ce2</a><br>
+              <span style="opacity: 0.7;">技能包公開版下載連結，課後在 LINE 社群發。</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 互動節點 -->
+  <section class="section open interaction theme-light" id="sec-int">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-time">5 分鐘</span>
+      <div class="section-title-block">
+        <div class="section-title">互動節點：你用 AI 到哪個階段？</div>
+        <div class="section-summary">聊天室回 1 / 2 → 統計比例 → 決定後半段深度</div>
+      </div>
+      <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <h3>請所有學員在聊天室回答</h3>
+        <ol style="font-size: 22px;">
+          <li><strong>我只用過網頁版 AI</strong>，每次都要重新介紹自己</li>
+          <li><strong>我有資料累積、有固定流程</strong></li>
+        </ol>
+
+        <h4>這個回答決定下半段深度</h4>
+        <ul>
+          <li>多數回 1 → 後半段偏網頁版操作（ChatGPT 專案、NotebookLM）</li>
+          <li>不少回 2 → 後半段可以帶到桌面版 Codex、給 Agent 讀整個資料夾</li>
+        </ul>
+
+        <div class="tip-box">
+          <div class="tip-box-label">這是 OGSM 的 M 之一</div>
+          記下回 1 vs 回 2 的比例，這影響另外兩堂課的深度安排。
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 段落 二 -->
+  <section class="section open theme-dark" id="sec-2">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-time">25 分鐘</span>
+      <div class="section-title-block">
+        <div class="section-title">二 用 AI 工具測試市場反應</div>
+        <div class="section-summary">看別人 MVP 拆機制 → 用 AI 模擬目標客戶反應（真實需求檢驗法 + 多 persona）→ AI 辦公室演化故事三幕（對應海報 ②）</div>
+      </div>
+      <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <h3>段落核心觀念</h3>
+        <p>怎麼用 AI 找市場行情和競品？搭配講師兩次創業（影像工作室、AI 教練）的真實經驗，分享踩過的坑。</p>
+
+        <h3>2-A 看別人 MVP：不要抄工具，要看他解決什麼問題（8 分）</h3>
+
+        <p>現在市場很多爆紅的 AI 產品（小龍蝦、各種 Agent 工具），看到容易焦慮。<strong>真正要學的不是工具，是機制</strong>：</p>
+        <ol>
+          <li>它紅是因為解決了什麼痛點？</li>
+          <li>它的機制、設計有什麼特別？</li>
+          <li>有哪些部分能為我所用？</li>
+        </ol>
+
+        <h4>現場示範：用 AI 搜尋拆解一個當下熱門的 AI 產品</h4>
+        <p>示範拆解的思路（不是答案）。學員回家可以自己套用。</p>
+
+        <h4>講師案例：兩次創業看市場時機</h4>
+        <ul>
+          <li><strong>影像工作室 → AI 教練</strong>：怎麼判斷時機</li>
+          <li><strong>等小龍蝦出來一個月再進場</strong>：叫 Codex 幫忙安裝 + 上網查風險，等於別人幫我踩過坑了才進場</li>
+        </ul>
+
+        <div class="quote-box">
+          <span class="quote-label">關鍵判斷</span>
+          沒有人做，可能是<strong style="color: var(--accent);">藍海</strong>，也可能是<strong style="color: var(--accent);">死海</strong>。<br>
+          用 AI 來幫忙檢查盲點，就是幫你判斷它屬於哪一種。
+        </div>
+
+        <div class="further-reading">
+          <span class="further-reading-label">📚 延伸閱讀</span>
+          <ul>
+            <li><a href="https://vocus.cc/article/68c12abbfd89780001ed3ce2" target="_blank">客戶都說很棒，但就是不買單？真實需求調查法</a>（驗證需求是不是真的）</li>
+            <li><a href="https://vocus.cc/article/689472dbfd89780001d39847" target="_blank">一人公司、自由工作者合作必備！兩個實戰策略，幫你目標對齊達成共識</a>（遠中近三階段目標對齊）</li>
+          </ul>
+        </div>
+
+        <p>學員帶回：「<strong>看別人 MVP」拆解教學完整版</strong>會做成獨立 PDF/HTML 參考資料。</p>
+
+        <h3>2-B 用 AI 模擬市場反應（8 分）<span style="font-size: 16px; color: var(--accent-deep); font-weight: 500;">← 對應海報 ②</span></h3>
+
+        <div class="quote-box">
+          <span class="quote-label">核心問題</span>
+          MVP 還沒做出去之前，<strong style="color: var(--accent);">AI 能不能幫你先預演一輪市場反應？</strong>
+        </div>
+
+        <p>可以。兩條路：</p>
+
+        <div class="demo-block">
+          <div class="demo-block-title">路線一：真實需求調查</div>
+          <p>把你的產品 / 服務丟給 AI，要它扮演<strong>真實的潛在客戶</strong>——不會客氣、會問尖銳問題的人。</p>
+          <p>讓 AI 用真實需求調查的標準問你：</p>
+          <ul>
+            <li>「你<strong>上次</strong>遇到這個問題是什麼時候？」（過去事實）</li>
+            <li>「你那時候<strong>怎麼解決</strong>的？花了多少錢？」（行為）</li>
+            <li>「<strong>誰在主導這個決定</strong>？預算從哪來？」（決策權）</li>
+            <li>「除了我，你還會去問誰？」（替代方案）</li>
+          </ul>
+          <p style="font-size: 18px; opacity: 0.85;">注意：<strong>不問「你會不會買」「你覺得這想法好不好」</strong>，這兩種問題只會得到客氣答案。</p>
+          <p style="font-size: 18px; opacity: 0.85;">這正是今天要送的「<strong>真實需求調查技能包</strong>」，回家可以對著任何點子跑一輪。</p>
+        </div>
+
+        <div class="demo-block" style="border-color: var(--accent2);">
+          <div class="demo-block-title" style="color: var(--accent2);">我自己踩過的雷 ｜ 以前我問卷怎麼問</div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
+            <div style="padding: 18px 20px; background: rgba(216, 116, 71, 0.1); border-radius: 8px; border-left: 3px solid var(--accent);">
+              <div style="font-weight: 700; color: var(--accent); margin-bottom: 10px; font-size: 17px;">❌ 以前我問卷的問法</div>
+              <ul style="font-size: 16px; line-height: 1.7; padding-left: 20px; margin: 0;">
+                <li>「覺得 AI 辦公室還要加什麼功能？」</li>
+                <li>「這個方案好不好？」</li>
+                <li>「你願意付多少錢上這堂課？」</li>
+              </ul>
+              <p style="font-size: 15px; opacity: 0.8; margin: 12px 0 0;">大家都會說：「好棒棒、感覺很需要、3,980 我願意付！」<br><strong>結果實際開賣，沒人下單。</strong></p>
+            </div>
+
+            <div style="padding: 18px 20px; background: rgba(92, 117, 96, 0.1); border-radius: 8px; border-left: 3px solid var(--accent2);">
+              <div style="font-weight: 700; color: var(--accent2); margin-bottom: 10px; font-size: 17px;">✅ 改用真實需求調查</div>
+              <ul style="font-size: 16px; line-height: 1.7; padding-left: 20px; margin: 0;">
+                <li>「你<strong>最近一次</strong>處理 AI 相關事情是什麼時候？卡在哪？」</li>
+                <li>「你<strong>那時候怎麼解決</strong>？花了多少時間／錢？」</li>
+                <li>「除了我這套，你還<strong>找過誰</strong>？為什麼沒成？」</li>
+              </ul>
+              <p style="font-size: 15px; opacity: 0.8; margin: 12px 0 0;">問<strong>過去事實</strong>，不問<strong>未來假設</strong>。<br><strong>事實才會誠實，假設都是禮貌。</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-block">
+          <div class="demo-block-title">路線二：多 persona 模擬訪談</div>
+          <p>用 ChatGPT / NotebookLM，讓 AI 同時扮演 <strong>3–5 個不同背景的目標客戶</strong>，從各自視角看你的產品。</p>
+          <p>例如要驗證「AI 辦公室裝機課」這個產品，我會讓 AI 模擬：</p>
+          <ul>
+            <li>persona A：4-50 歲、想學 AI 但完全不會的家庭主婦</li>
+            <li>persona B：30 歲、自由接案者，已經會用 ChatGPT，想升級工作流</li>
+            <li>persona C：中小企業老闆，想導入 AI 但怕踩雷</li>
+            <li>persona D：剛轉職、AI 焦慮中的上班族</li>
+          </ul>
+          <p>請每個 persona 對同一份產品頁回答三件事：</p>
+          <ol>
+            <li>看完第一眼，<strong>第一個疑問</strong>是什麼？</li>
+            <li>什麼會讓你<strong>立刻關掉</strong>？</li>
+            <li>什麼會讓你<strong>想私訊問更多</strong>？</li>
+          </ol>
+          <p style="font-size: 18px; opacity: 0.85;">→ <strong>看哪個 persona 反應最熱、哪個最冷</strong>——這就是初步的市場輪廓。</p>
+          <p style="font-size: 18px; opacity: 0.85;">→ 我那段「從安妮少女轉米卡貓咪」的故事（等下 2-C 會講），就是用這方法跑出來的：發現 persona A 對「貓咪療癒感」反應最強。</p>
+        </div>
+
+        <div class="quote-box">
+          <span class="quote-label">關鍵原則</span>
+          AI 模擬的市場反應<strong style="color: var(--accent);">不是答案，是假設</strong>。<br>
+          假設先過 AI 一輪，再帶到真人面前驗證——就是下一段（三、做 MVP）的事。
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-box-label">為什麼要先 AI 模擬，再做 MVP</div>
+          做 MVP 要花時間做頁、寫文案、設定 Portaly。如果一開始假設就錯，整套白做。<br>
+          AI 模擬等於<strong>在花成本之前，先過一輪「最便宜的假測試」</strong>，回到開場那句：保住你的信任額度。
+        </div>
+
+        <h3>2-C 還可以更進一步：用 AI 直接做出「假產品」測反應</h3>
+
+        <p>AI 模擬訪談是「<strong>用嘴測</strong>」。再進一步，是<strong>用 AI 直接做出視覺看得到的假產品</strong>，丟到真人面前看反應。</p>
+
+        <div class="demo-block">
+          <div class="demo-block-title">AI 模擬產品｜這幾種都很實用</div>
+          <ul>
+            <li><strong>用 AI 做網站</strong>：產品還沒寫程式，先做一頁假網站，看大家點進來會不會留 Email</li>
+            <li><strong>用 AI 做模擬圖</strong>：用 ChatGPT、Midjourney 之類，直接生成產品畫面、UI 截圖、貼文圖。我推米卡貓咪那組圖就是這樣做的——<strong>大家一看就說「這個療癒多了，看起來會比較想用」</strong></li>
+            <li><strong>用 AI 模擬使用情境</strong>：拍個短示範影片、做個動態 demo</li>
+          </ul>
+          <p style="opacity: 0.85; font-size: 18px;">現在用 AI 生成圖片很方便，我這堂課不細講操作。重點是觀念：<strong>不要等產品做好才測</strong>，先用 AI 做出視覺，先測。</p>
+        </div>
+
+        <div class="story-box">
+          <div class="story-box-title">經典案例｜真人扮演語音助理</div>
+          <p>有個很經典的故事。早期語音助理不確定市場買不買單時，有團隊用了一招：</p>
+          <p><strong>請真人躲在螢幕後面，模擬語音助理回答客戶。</strong></p>
+          <p>客戶以為是真的 AI 在運作，回應「這個好酷喔！」。團隊收集到大家的真實反應後，才真的把產品做出來。</p>
+          <p style="opacity: 0.85; font-size: 18px;">→ 這就是 MVP 裡叫「<strong>Concierge MVP（手動服務 MVP）</strong>」的經典做法。<br>用真人手動撐起後台，先驗證需求，再去開發系統。</p>
+        </div>
+
+        <h3>2-D 我自己的 AI 辦公室產品演化故事（10 分）</h3>
+
+        <p style="opacity: 0.8;">這是把上面的方法，套在我自己身上的真實案例。三幕劇。</p>
+
+        <div class="story-box">
+          <div class="story-box-title">第一幕：定位錯了，受眾沒反應</div>
+          <p>一開始我把 <strong>AI 辦公室</strong> 定價 3,980，包山包海一堆功能。</p>
+          <p>IG 用「<strong>安妮少女</strong>」形象推 → 沒人理。</p>
+          <p>失敗訊號：「太多功能用不到。蘋果手機那麼貴是因為品牌，<strong>我沒有品牌</strong>。」</p>
+        </div>
+
+        <div class="story-box">
+          <div class="story-box-title">第二幕：換一個受眾，換一張臉</div>
+          <p>改成「<strong>米卡貓咪管家</strong>」形象。</p>
+          <p>突然抓到了：<strong>「會找我裝機的大概就是 4-50 歲女生 → 賣的是輕鬆療癒的貓咪感。」</strong></p>
+          <p>從「賣 AI 辦公室」 → 改成「賣 AI 貓咪管家」。</p>
+          <p style="font-size: 18px; opacity: 0.8;">這段對應到我 IG 那段時間貼文的形象大轉換。</p>
+        </div>
+
+        <div class="story-box">
+          <div class="story-box-title">第三幕：實際裝機後再修一刀</div>
+          <p>實裝過程發現：「兩三小時學員就累了。」</p>
+          <p>結論：先賣最基本的 <strong>AI 辦公室 + 概念裝潢就好（1,000 元）</strong>。進階功能後續線上再聊。</p>
+          <p>關鍵體悟：<strong>只要 AI 辦公室基底裝好，後面教什麼都很簡單。</strong></p>
+        </div>
+
+        <h4 style="margin-top: 36px;">教我這一切的觀察方法</h4>
+
+        <p>我會拿 AI 辦公室的網頁給大家看。我學到一招：</p>
+
+        <div class="quote-box">
+          <span class="quote-label">觀點</span>
+          <strong style="color: var(--accent);">把產品拿給別人用的時候，你不要說話。</strong><br>
+          要看別人怎麼用、卡在哪裡。
+        </div>
+
+        <p>所以我一開始設定 AI 辦公室的時候，就有一招很聰明的安排：</p>
+
+        <div class="story-box">
+          <div class="story-box-title">場景一：下載安裝卡關</div>
+          <p>「下載安裝可以先拍五分鐘的教學影片。」我在線上課其實就是教學影片的概念，所以這段我就知道<strong>可以拍成教學影片</strong>。</p>
+        </div>
+
+        <div class="story-box">
+          <div class="story-box-title">場景二：裝完後不會動</div>
+          <p>裝完之後不會動怎麼辦？我說：「我在旁邊引導。」<br>
+          學員說：「對啊，那是因為你在旁邊教啊。」<br>
+          這樣我就知道——<strong>沒人在旁邊就不會用</strong>。</p>
+          <p>所以我說：「那你現在想像我就是 AI 助教。我直接模擬，你會下什麼指令？」<br>
+          這個過程，其實就是<strong>把我跟學員的互動，訓練成 AI 助教</strong>。等學員裝好之後，AI 助教就會跑出來幫忙做事。</p>
+        </div>
+
+        <div class="story-box">
+          <div class="story-box-title">場景三：AI 辦公室不夠親民 → 換成米卡</div>
+          <p>後來發現 AI 辦公室太抽象，所以我換米卡。換米卡之後更簡單了：<br>
+          我直接給學員看一張圖：「這是米卡的樣子，米卡可以幫你做這些事。」</p>
+          <p>大家覺得「<strong>好多了，簡單很多了</strong>。」</p>
+          <p>你看，我甚至更懶。連社群網站、官方 LINE 我都還沒做，<strong>就只是先拿一張圖給大家看，就驗證了</strong>——AI 辦公室目前還是要實體裝機，裝到一定程度後，再把這些經驗設計成技能包跟 AI 助教，然後就是米卡的樣子。</p>
+        </div>
+
+        <h4 style="margin-top: 32px;">所以為什麼現在開實體裝機課，又同時招商</h4>
+
+        <p>現在就是開始體驗實體裝機課，同時也在招商。希望可以早日找到夥伴一起合推。</p>
+
+        <p>因為我自己<strong>不停的在帶課程</strong>，零基礎的實體裝機課比較少時間做。所以我先退一步，<strong>累積受眾、累積群眾、累積自己的私域名單</strong>。累積到一定程度，就可以再發進階的課程。</p>
+
+        <p>那時候其實就可以線上了，因為基底裝機裝好之後，線上就沒問題——學員不懂，我就把這堂課的 AI 助教都先發給大家。</p>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 段落 三 -->
+  <section class="section open theme-light" id="sec-3">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-time">15 分鐘</span>
+      <div class="section-title-block">
+        <div class="section-title">三 用 AI 做出 MVP，直接測市場水溫</div>
+        <div class="section-summary">產品頁＋報名頁＋社群貼文＋Portaly → 改標題＝翻譯給受眾 → 行銷漏斗</div>
+      </div>
+      <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <h3>段落核心</h3>
+        <p>不只分析，<strong>用 AI 快速做出可賣的東西</strong>。今晚下課，學員就能丟到朋友圈試反應。</p>
+
+        <h3>3-A 用 AI 做產品頁、報名頁、社群貼文（8 分）</h3>
+        <ul>
+          <li>AI 生出產品頁、報名頁草稿</li>
+          <li>AI 寫社群貼文，搭配「<strong>改標題＋踩雷檢查</strong>」技能包</li>
+          <li><strong>Portaly</strong>（傳送門）變現工具設定 → 立刻審核立刻就可以開了</li>
+        </ul>
+
+        <div class="tip-box">
+          <div class="tip-box-label">資源連結</div>
+          Portaly 傳送門：<a href="https://portaly.cc/" target="_blank">https://portaly.cc/</a>（一個連結頁就能收款，不用架站）<br>
+          我自己的傳送門：<a href="https://portaly.cc/Jiang_Yude" target="_blank">https://portaly.cc/Jiang_Yude</a>（直接看實際長怎樣）
+        </div>
+
+        <h3>3-B 改標題的本質：翻譯（5 分）</h3>
+
+        <p>有時候我發了一篇自己覺得超讚的內容，結果沒反應。</p>
+
+        <div class="quote-box">
+          那我就會想——<br>
+          是不是<strong style="color: var(--accent);">需要的人，根本沒看懂這是寫給他的？</strong>
+        </div>
+
+        <p>這時我會請 AI 幫我<strong>翻譯</strong>。請它把我寫的東西，翻成「正在經歷這個問題的人」看到會說：「誒，這我，我要。」</p>
+
+        <p>「翻譯」是這堂課貫穿到底的核心能力——</p>
+        <ul>
+          <li>把點子翻譯給 AI 顧問拷問</li>
+          <li>把產業報告翻譯成你看得懂的比喻</li>
+          <li>把你的內容翻譯成受眾聽得懂的標題</li>
+        </ul>
+        <p>都是同一個能力。</p>
+
+        <div class="further-reading">
+          <span class="further-reading-label">📌 脆文參考</span>
+          <ul>
+            <li><a href="https://www.threads.com/@jiang_yude_coach/post/DX3uZ7fknUs" target="_blank">靈感是可以排程的，我整理出一個公式</a>（靈感累積方法論）</li>
+            <li><a href="https://www.threads.com/@jiang_yude_coach/post/DX8jZ9winYw" target="_blank">把心法外包給工具，沒多久人就廢了｜社群定位篇</a>（找定位＋翻譯給受眾）</li>
+          </ul>
+        </div>
+
+        <div class="further-reading">
+          <span class="further-reading-label">📚 方格子延伸閱讀</span>
+          <ul>
+            <li><a href="https://vocus.cc/article/68f2f8c2fd897800010ae8e6" target="_blank">卡片盒筆記法：從拆解到重組，用高頻回顧激發知識創新</a>（靈感累積的方法論）</li>
+            <li><a href="https://vocus.cc/article/696104e5fd8978000141009e" target="_blank">用個人寫作風格分析師，一招挖掘你的個人風格</a>（避免 AI 公版句型）</li>
+            <li><a href="https://vocus.cc/article/68f5d5dcfd89780001a0f230" target="_blank">不是專業小編也能寫出亮點！活動社群貼文寫作技巧</a></li>
+          </ul>
+        </div>
+
+        <h3>3-C 我自己的驗證漏斗（2 分）</h3>
+
+        <div class="demo-block">
+          <div class="demo-block-title">三層漏斗</div>
+          <p style="font-size: 22px; line-height: 2;">
+          <strong>脆文</strong>（最便宜的水溫測試）<br>
+          ↓ 反應好的主題往下推<br>
+          <strong>免費講座</strong>（中等成本，看會不會爆滿）<br>
+          ↓ 免費都爆滿不了，就不用玩了<br>
+          <strong>付費課程</strong>（最貴，但確定有人要）
+          </p>
+        </div>
+
+        <div class="quote-box">
+          <span class="quote-label">觀點</span>
+          免費講座都沒辦法爆滿，那就不用玩了。
+        </div>
+
+        <p>學員帶回：<strong>改標題＋踩雷檢查技能包</strong> + Portaly 設定流程文件。</p>
+
+        <h3>3-D 更多 MVP 案例：我自己跑過的（順便講）</h3>
+
+        <p>順便跟大家講，我這堂免費限量角度其實也是一個 <strong>MVP</strong>，也是一個小單元的測試。</p>
+
+        <div class="story-box">
+          <div class="story-box-title">案例一：5/3 免費講座本身就是 MVP</div>
+          <p>我 5/3 開了一場免費線上講座，講「把書、影片、PDF 變成你的 AI 顧問」。內容上完之後我發現——<strong>同一份內容，我現在三個月內可以再講一次</strong>。</p>
+          <p>內容是<strong>可以重複應用</strong>的。要學會的是<strong>拆解</strong>：把這些內容拆成像方塊跟積木一樣，可以任意組裝成新的型態。</p>
+        </div>
+
+        <div class="story-box">
+          <div class="story-box-title">案例二：技能包拆細，本身也是 MVP</div>
+          <p>我現在好像有十幾二十個技能包，看起來很多。但其實<strong>就是我自己原本常用的一兩個流程而已</strong>。我只是把它拆得很細。</p>
+          <p>為什麼拆細？兩個原因：</p>
+          <ol>
+            <li>每個人的需求都不同，不見得每個人的工作流程都跟我一樣。所以我把它拆成<strong>一個一個動作、一個一個功能</strong>，讓大家可以自己組</li>
+            <li>這樣比較好調查——大家實際上比較常用哪些功能、哪些步驟</li>
+          </ol>
+          <p style="opacity: 0.85; font-size: 18px;">用一句話說：<strong>我把一個整合流程拆成 10 個步驟，變成 10 個技能包</strong>。我自己原本是這 10 個步驟整合成一整個技能包。</p>
+        </div>
+
+        <div class="story-box">
+          <div class="story-box-title">案例三：數位分身小聚</div>
+          <p>這也是一個最小可行性測試的案例：</p>
+          <p>👉 <a href="https://twin-village.vercel.app/dialogues" target="_blank" style="word-break: break-all;">https://twin-village.vercel.app/dialogues</a></p>
+          <p style="font-size: 18px; opacity: 0.85;">先做一個「分身對話」介面驗證，再決定後面要怎麼長。</p>
+        </div>
+
+        <div class="quote-box">
+          <span class="quote-label">觀點</span>
+          要練習 MVP，<strong style="color: var(--accent);">最重要的能力是「原子化」</strong>。<br>
+          把你的內容、產品、服務，<strong style="color: var(--accent);">設計得像積木一樣</strong>。<br>
+          看遇到什麼情況、什麼需求、什麼趨勢、什麼市場，<strong style="color: var(--accent);">立刻組裝成可以用的形狀去解決問題</strong>。
+        </div>
+
+        <p style="opacity: 0.85; font-size: 18px;">這就是<strong>卡片盒筆記法的原子化</strong>觀念。我這堂課不細講，大家可以自己搜尋。</p>
+
+        <h3>3-E 主題彈性：未來課程怎麼長</h3>
+
+        <p>因為內容能原子化，所以未來主題能彈性擴展：</p>
+
+        <ul>
+          <li><strong>ESG 相關</strong>：可以再開一堂專門 ESG 報告書 + AI 應用</li>
+          <li><strong>Claude 設計加值</strong>：用 Claude 做一些設計片段技能包，做出網頁設計版型</li>
+          <li><strong>6-7 月：AI 短影音預期成熟</strong>：現在 AI 圖片已經差不多了，估計 6-8 月 AI 短影音會成熟<br>
+          注意——<strong>不是用 AI 純生成影片</strong>，而是用手機拍真人影片之後，<strong>AI 幫忙剪片、上字幕、做特效</strong>。因為真人實拍還是比較有信任感</li>
+        </ul>
+
+        <p style="opacity: 0.85;">我覺得這個之後再外加課程。一開始包山包海 3,980 雖然划算，但學員用不到就沒意義。1,000 塊先讓大家裝機 + 拿一大堆免費技能包，門檻低很多。</p>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 段落 四 -->
+  <section class="section open theme-dark" id="sec-4">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-time">27 分鐘</span>
+      <div class="section-title-block">
+        <div class="section-title">四 整理你的資料，建立自己的 AI 助理</div>
+        <div class="section-summary">費曼學習法 → ChatGPT 專案模式 → NotebookLM 讓報告來讀我 → 桌面版 Agent 預告</div>
+      </div>
+      <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <h3>段落核心觀念</h3>
+
+        <div class="quote-box">
+          <span class="quote-label">前提</span>
+          AI 回答很糟，常常不是 AI 笨，<strong style="color: var(--accent);">是你的資料它讀不到或不好讀</strong>。<br>
+          你要 AI 顧問問得好，<strong style="color: var(--accent);">先把自己的資料整理好</strong>。
+        </div>
+
+        <p>這段我用 5/3 講座完整版簡報直接帶過，下面三個階段一次看完。</p>
+
+        <h3>用 AI 學習、做我的顧問｜三個快速階段</h3>
+
+        <p style="opacity: 0.85;">下面這份是我 5/3 免費線上講座的完整簡報。從 ChatGPT 專案模式 → NotebookLM → 桌面版 Agent 三層進階一次看完。</p>
+
+        <div style="margin: 28px 0; border: 1.5px solid var(--text); border-radius: 8px; overflow: hidden; box-shadow: 5px 5px 0 var(--accent3);">
+          <div style="position: relative; padding-top: 62%; background: var(--cream);">
+            <iframe src="https://gamma.app/embed/xc4qvo8va75cjog"
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                    allow="fullscreen"
+                    title="把書、影片、PDF 變成你的 AI 顧問"></iframe>
+          </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 12px;">
+          🎯 <strong>嵌入無法看？</strong>直接打開：<a href="https://gamma.app/docs/2026-05-03-PDF-AI--xc4qvo8va75cjog?mode=doc" target="_blank" style="word-break: break-all;">把書、影片、PDF 變成你的 AI 顧問（完整版）</a>
+        </p>
+
+        <h4 style="margin-top: 36px;">這份簡報帶你看完什麼</h4>
+        <ul>
+          <li><strong>ChatGPT 專案模式</strong>：用 AI 學社會影響力報告、考 iPAS 證照的實戰故事</li>
+          <li><strong>NotebookLM + Gemini</strong>：讓報告來讀我（外部報告 × 我的工作日記交叉分析）</li>
+          <li><strong>桌面版 Agent</strong>：Codex / Claude Code 讀整個資料夾、找出我半年偏離主軸 80% 的盲點</li>
+          <li><strong>三層進階路徑</strong>：從免費的 ChatGPT 專案，一路到付費的桌面版 Agent</li>
+        </ul>
+
+        <h4>為什麼推 Codex 不推 Claude（給小白學員聽的）</h4>
+        <p>資料還沒整理好之前，Claude 就是<strong>一小時 6,000 塊的講師幫你整理桌面</strong>，浪費。<br>
+        Codex 免費版就能試，門檻低、試錯成本低。<strong>資料整理好再上 Claude</strong>。</p>
+
+        <div class="quote-box">
+          <span class="quote-label">觀點</span>
+          文件就是系統。<br>
+          你只要會寫文件、會分類資料夾，就可以打造個人 AI 辦公室。<strong style="color: var(--accent);">不用寫程式</strong>。
+        </div>
+
+        <div class="story-box" style="border: 2px dashed var(--accent-deep); background: rgba(212, 165, 116, 0.18);">
+          <div class="story-box-title">💡 Bonus 案例 ｜ 進度允許才展開：不要去記 40 個 AI</div>
+          <p>有個同學裝了 <a href="https://github.com/msitarzewski/agency-agents" target="_blank">agency-agents</a> 這個套件，<strong>一口氣多了 40 個 AI 角色</strong>。</p>
+          <p>裝完之後他傻眼——<strong>40 個記不住</strong>，跑來跟我要一個「AI 指揮官」幫他管這 40 個。</p>
+          <p>我跟他說：你真正需要的不是「多一個指揮官」，而是——</p>
+
+          <div class="quote-box" style="margin: 16px 0; font-size: 22px;">
+            你直接下一個指令叫它「<strong style="color: var(--accent);">重組</strong>」就好。<br><br>
+            你真正需要的<strong style="color: var(--accent);">不是多少個人，而是能力或流程</strong>。<br>
+            請它重新組成一個你能懂、好管理的流程——<br>
+            甚至直接<strong style="color: var(--accent);">融入你原本的流程</strong>。
+          </div>
+
+          <p><strong>關鍵句</strong>：</p>
+          <div class="quote-box" style="margin: 16px 0; font-size: 24px;">
+            你要讓<strong style="color: var(--accent);">這 40 個 AI 融入你的流程</strong>，<br>
+            不是你去記住這 40 個 AI。
+          </div>
+
+          <p style="font-size: 18px; opacity: 0.85;">→ 這個案例正好是整堂課主軸的反向示範——同學一開始走錯路，是「<strong>去學工具</strong>」（記住 40 個 AI 是誰）。<br>正確的方向是「<strong>讓工具來學你</strong>」（重組成你原本的流程）。</p>
+
+          <p style="font-size: 18px; opacity: 0.85;">→ 這也是為什麼前面強調「<strong>文件就是系統</strong>」——你的工作流程才是核心，AI 角色只是進來補位的人。</p>
+        </div>
+
+        <div class="further-reading">
+          <span class="further-reading-label">📚 延伸閱讀</span>
+          <ul>
+            <li><a href="https://vocus.cc/article/693928eafd89780001b24913" target="_blank">四維度資料整理法：讓 AI 讀懂你的專業脈絡</a></li>
+            <li><a href="https://vocus.cc/article/690b3269fd89780001f56804" target="_blank">實踐知識管理：透過 AI 建立個人化的知識系統與習慣性記錄</a></li>
+            <li><a href="https://vocus.cc/article/693548bafd89780001bdc290" target="_blank">Claude Skills 推出：AI 時代隱性知識提煉的關鍵趨勢</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 段落 五 -->
+  <section class="section open reveal" id="sec-5">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-time">5 分鐘</span>
+      <div class="section-title-block">
+        <div class="section-title">五、QA 時間 ＋ 課程總結</div>
+        <div class="section-summary">回顧今天五段在演示什麼 → 下一步建議 → Q&amp;A 開放發問</div>
+      </div>
+      <span class="toggle-icon">+</span>
+    </div>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <div class="quote-box">
+          <span class="quote-label">第一層揭曉</span>
+          到底什麼是 MVP？大家有發現了嗎？<br><br>
+          <strong style="color: var(--accent); font-size: 30px;">這堂課，就是我在推 AI 助教的 MVP。</strong>
+        </div>
+
+        <p>但更重要的是——<strong>這個 MVP 不是我一個人推。</strong></p>
+
+        <div class="quote-box">
+          <span class="quote-label">第二層揭曉 ｜ 真正意圖</span>
+          我真正要做的事，是找<strong style="color: var(--accent);">夥伴一起合推 AI 辦公室</strong>。<br><br>
+          這堂課就是讓你看到：「啊，原來這套東西可以這樣推」。
+        </div>
+
+        <h3>我真正在賣的是什麼</h3>
+        <div class="quote-box">
+          我真正賣的不是教你學 AI 工具，<br>
+          我真正賣的是<strong style="color: var(--accent);">設計工作流＋累積知識庫</strong>的能力。
+        </div>
+
+        <p>所以 AI 辦公室產品分三層——讓不同階段的人都接得住：</p>
+
+        <table class="simple-table">
+          <tr><th>階段</th><th>名稱</th><th>時長</th><th>價位</th><th>對象</th></tr>
+          <tr>
+            <td><strong>L1</strong></td>
+            <td>完全零基礎裝機</td>
+            <td>3 小時</td>
+            <td>1,000 元 / 人</td>
+            <td>完全沒用 AI 的人</td>
+          </tr>
+          <tr>
+            <td><strong>L2</strong></td>
+            <td>AI 工作流工作坊</td>
+            <td>5 小時</td>
+            <td>3,980 元 / 人</td>
+            <td>有基礎、想優化現有工作流</td>
+          </tr>
+          <tr>
+            <td><strong>L3</strong></td>
+            <td>開創型 AI 系統一對一</td>
+            <td>客製</td>
+            <td>30,000 元 / 案起</td>
+            <td>有獨特系統者</td>
+          </tr>
+        </table>
+
+        <h3>合推 AI 辦公室 ｜ 4 種模式</h3>
+
+        <div class="partner-card">
+          <h3>📌 給課堂上有渠道、有社群的你</h3>
+          <p>如果你聽到這裡覺得「我有一群人需要這個」、「我可以揪人」、「我有場地」、「我自己想當講師合作」——這四種模式可以選：</p>
+
+          <div class="partner-table">
+            <div><strong>模式 A ｜ 集團採購方</strong>　你的社群／公司向江江採購一批工作坊席次，再分配給成員</div>
+            <div><strong>模式 B ｜ 冠名贊助＋導流方</strong>　工作坊掛你的品牌名，江江負責內容，你負責場地＋招生（可分潤）</div>
+            <div><strong>模式 C ｜ 季度訂閱制</strong>　社員每年付一筆 AI 增能會費，享有工作坊、一對一諮詢、專屬 AI 助理</div>
+            <div><strong>模式 D ｜ 常駐顧問</strong>　江江以年度合約擔任 AI 增能顧問，月度工作坊＋諮詢＋系統維護</div>
+          </div>
+
+          <p style="margin-top: 20px; font-size: 17px; opacity: 0.9;">→ 想聊合推：課後直接私訊江江，或在 LINE 社群找我。</p>
+        </div>
+
+        <h3>回顧今天你體驗到的</h3>
+        <table class="simple-table">
+          <tr><th>今天做的事</th><th>背後在演示什麼</th></tr>
+          <tr><td>三視角靈魂拷問</td><td>什麼是技能包＋什麼是 AI 輔助決策</td></tr>
+          <tr><td>看別人 MVP + AI 辦公室演化故事</td><td>什麼叫「看本質不看表象」</td></tr>
+          <tr><td>用 AI 做 MVP + 翻譯給受眾</td><td>行銷是輔助決策的副產品</td></tr>
+          <tr><td>整理資料建 AI 助理</td><td>什麼叫「文件就是系統」</td></tr>
+          <tr><td>這整堂兩小時</td><td>江江在示範「規劃好讓 AI 來學」<strong>，並且找合推夥伴</strong></td></tr>
+        </table>
+
+        <h3>所以——</h3>
+        <ul>
+          <li>什麼是技能包？你今天帶回家三個</li>
+          <li>什麼是 AI 助教？我整場課的示範就是</li>
+          <li>什麼叫「規劃好讓 AI 來學」？就是我今天做的事</li>
+          <li><strong>什麼叫「合推商業模式」？就是上面那四種模式</strong></li>
+        </ul>
+
+        <h3>下一步</h3>
+        <ul>
+          <li>聽得懂、用得順 → 下一步往桌面版 AI 走，或來 5/17 實體裝機課</li>
+          <li>有社群、有渠道、想合推 → 課後私訊我聊四種模式</li>
+          <li>還不行 → 先停、先練基本功，先用網頁版 AI 累積資料</li>
+        </ul>
+
+        <details style="margin: 32px 0;">
+          <summary style="cursor: pointer; padding: 18px 26px; background: var(--card-deep); border-radius: 10px; font-size: 19px; font-weight: 600; color: var(--text); border-left: 4px solid var(--accent-light);">▸ 5/17 我有一場實體裝機課（點開看詳情）</summary>
+
+          <div class="cta-card" style="margin-top: 16px;">
+            <h3>5/17 AI 辦公室實體裝機課</h3>
+            <div class="cta-meta">一日 ｜ 限額 10–20 人 ｜ 台北民權西路</div>
+
+            <div style="text-align: left; max-width: 640px; margin: 0 auto;">
+              <p style="font-size: 19px; opacity: 0.95; margin-bottom: 14px;"><strong style="color: #FFF8DC;">手把手</strong>：幫你裝好 Codex / Claude Code，現場排錯</p>
+              <p style="font-size: 19px; opacity: 0.95; margin-bottom: 14px;"><strong style="color: #FFF8DC;">會的事</strong>：教你「會寫文件、會分類資料夾，就能建出來的知識庫架構」</p>
+              <p style="font-size: 19px; opacity: 0.95; margin-bottom: 14px;"><strong style="color: #FFF8DC;">三個技能包</strong>：現場跑、教你改成自己的版本</p>
+              <p style="font-size: 18px; opacity: 0.85;"><strong style="color: #FFF8DC;">為什麼實體</strong>：環境裝機需要面對面排錯，遠端做不到</p>
+            </div>
+
+            <div class="cta-line">
+              讓 AI 來學你，不再 AI 焦慮。
+            </div>
+
+            <p style="margin-top: 20px; font-size: 18px;">報名：江江 LINE 社群</p>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 課後資源 + 7 月行銷課預告 -->
+  <section class="section open theme-light" style="border-style: dashed;">
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <h3 style="margin-top: 0;">📌 課後資源 ｜ ChatGPT 生圖必看脆文</h3>
+
+        <p>順便給大家三篇我寫過的脆文，講 <strong>ChatGPT 生圖怎麼做出有自己風格、又穩定的成果</strong>：</p>
+
+        <div class="further-reading">
+          <span class="further-reading-label">📌 脆文參考｜ChatGPT 生圖系列</span>
+          <ul>
+            <li><a href="https://www.threads.com/@jiang_yude_coach/post/DXk16RRgO5m" target="_blank">生圖前先複製這段指令，你的 GPT 海報就跟別人不一樣</a></li>
+            <li><a href="https://www.threads.com/@jiang_yude_coach/post/DXnaDvIiYNk" target="_blank">用 ChatGPT 生圖必看：專案模式，讓你喜歡的風格能夠穩定產出</a></li>
+            <li><a href="https://www.threads.com/@jiang_yude_coach/post/DXqhyMwide1" target="_blank">ChatGPT 生圖一直不穩定？尤其是角色不一致怎麼辦？教你用「三視圖」幫角色做定妝照</a></li>
+          </ul>
+        </div>
+
+        <h3 style="margin-top: 36px;">🗓 順便預告：7 月行銷課</h3>
+
+        <p>今天 5/5 這堂是「<strong>創業點子驗證術</strong>」。</p>
+        <p>7 月我會再開一堂<strong>行銷課</strong>，把「驗證之後怎麼推、怎麼翻譯給受眾、怎麼把 AI 生圖跟貼文寫作整套接起來」一次教完。</p>
+        <p style="opacity: 0.85;">想到時候來上課的，課後 LINE 社群會發消息。</p>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Footer -->
+<footer>
+  江江教練 ｜ 5/5 嘉我好漾 課程一頁式簡報 v1.2（招商版） ｜ 手帳大地色風 ｜ 2026-05-05 製作
+</footer>
+
+<!-- 字體調整器 -->
+<div class="font-control">
+  <button id="fontDown">A−</button>
+  <button id="fontReset">A</button>
+  <button id="fontUp">A+</button>
+</div>
+
+<script>
+function toggleSection(header) {
+  const section = header.parentElement;
+  section.classList.toggle('open');
+}
+
+const navLinks = document.querySelectorAll('.top-nav a');
+const sections = document.querySelectorAll('.section');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-30% 0px -50% 0px', threshold: 0 });
+
+sections.forEach(s => observer.observe(s));
+
+let currentScale = 1;
+const minScale = 0.5;
+const maxScale = 3;
+const step = 0.1;
+
+document.getElementById('fontUp').addEventListener('click', () => {
+  currentScale = Math.min(maxScale, currentScale + step);
+  applyFontScale();
+});
+document.getElementById('fontDown').addEventListener('click', () => {
+  currentScale = Math.max(minScale, currentScale - step);
+  applyFontScale();
+});
+document.getElementById('fontReset').addEventListener('click', () => {
+  currentScale = 1;
+  applyFontScale();
+});
+
+function applyFontScale() {
+  document.body.style.fontSize = (currentScale * 20) + 'px';
+}
+
+navLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href').substring(1);
+    const target = document.getElementById(targetId);
+    if (target) {
+      target.classList.add('open');
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
